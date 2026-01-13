@@ -81,4 +81,28 @@ class AnimalController {
         }
         return $lista;
     }
+
+    function BuscarNome($cod){
+        $config = require __DIR__ . '/../../config/database.php';
+
+        $servidor = $config['servidor'];
+        $usuario = $config['usuario'];
+        $senha = $config['senha'];
+
+        try{
+            $pdo = new PDO($servidor, $usuario, $senha);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $cSQL = $pdo->prepare('SELECT nome_animal FROM animal WHERE cod_animal = :codigo'); 
+            $cSQL->bindParam('codigo', $cod);
+            $cSQL->execute();
+            $nome = $cSQL->fetch(PDO::FETCH_ASSOC);
+            
+            $pdo = null; 
+
+        } catch(PDOException $ex){
+            echo 'Erro: ' . $ex->getMessage();
+        }
+
+        return($nome['nome_animal']);
+    }
 }
