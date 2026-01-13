@@ -1,0 +1,23 @@
+# Configurações sensíveis
+/config/database.php
+.env
+
+# Cache / temporários
+*.log
+*.tmp
+/cache/
+/storage/
+
+# Dependências
+/vendor/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# IDEs / Editores
+.vscode/
+.idea/
+
+# PHPUnit
+.phpunit.result.cache

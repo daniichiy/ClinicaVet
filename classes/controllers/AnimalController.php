@@ -1,0 +1,84 @@
+<?php
+
+class AnimalController {
+    function Listar(){
+        $config = require __DIR__ . '/../../config/database.php';
+
+        $servidor = $config['servidor'];
+        $usuario = $config['usuario'];
+        $senha = $config['senha'];
+
+        $lista = [];
+
+        try{
+            $pdo = new PDO($servidor, $usuario, $senha);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $cSQL = $pdo->prepare('SELECT cod_animal, nome_animal, cod_especie FROM animal'); 
+            $cSQL->execute();
+
+            while ($dados = $cSQL->fetch(PDO::FETCH_ASSOC)){
+                $codigo = $dados['cod_animal'];
+                $nome = $dados['nome_animal'];
+                $codigoEspecie = $dados['cod_especie'];
+
+                $cSQL_Especie = $pdo->prepare('SELECT nome_especie FROM especie WHERE cod_especie = :codigo');
+                $cSQL_Especie->bindParam('codigo', $codigoEspecie);
+                $cSQL_Especie->execute();
+
+                $dadosEspecie = $cSQL_Especie->fetch(PDO::FETCH_ASSOC);
+                $nomeEspecie = $dadosEspecie['nome_especie'];
+                
+                $especie = new Especie($codigoEspecie, $nomeEspecie);
+
+                $animal = new Animal($codigo, $nome, $especie);
+                array_push($lista, $animal);
+            }
+            $pdo = null; //finaliza conexao com o banco
+
+        } catch(PDOException $ex){
+            echo 'Erro: ' . $ex->getMessage();
+        }
+        return $lista;
+    }
+
+    function BuscarPeloNome($nome){
+        $config = require __DIR__ . '/../../config/database.php';
+
+        $servidor = $config['servidor'];
+        $usuario = $config['usuario'];
+        $senha = $config['senha'];
+
+        $lista = [];
+
+        try{
+            $pdo = new PDO($servidor, $usuario, $senha);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $cSQL = $pdo->prepare('SELECT cod_animal, nome_animal, cod_especie FROM animal WHERE nome_animal = :nome'); 
+            $cSQL->bindParam('nome', $nome);
+            $cSQL->execute();
+
+            while ($dados = $cSQL->fetch(PDO::FETCH_ASSOC)){
+                $codigo = $dados['cod_animal'];
+                $nome = $dados['nome_animal'];
+                $codigoEspecie = $dados['cod_especie'];
+
+                $cSQL_Especie = $pdo->prepare('SELECT nome_especie FROM especie WHERE cod_especie = :codigo');
+                $cSQL_Especie->bindParam('codigo', $codigoEspecie);
+                $cSQL_Especie->execute();
+
+                $dadosEspecie = $cSQL_Especie->fetch(PDO::FETCH_ASSOC);
+                $nomeEspecie = $dadosEspecie['nome_especie'];
+                
+                $especie = new Especie($codigoEspecie, $nomeEspecie);
+
+                $animal = new Animal($codigo, $nome, $especie);
+                array_push($lista, $animal);
+            }
+            $pdo = null;
+
+        } catch(PDOException $ex){
+            echo 'Erro: ' . $ex->getMessage();
+        }
+        return $lista;
+    }
+}
