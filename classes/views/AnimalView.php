@@ -7,8 +7,6 @@ class AnimalView
     {
         $animalController = new AnimalController();
         $listaTodosAnimais = $animalController->Listar();
-        
-        var_dump($listaTodosAnimais);
 
         for ($i = 0; $i < count($listaTodosAnimais); $i++) {
             echo "<div class='caixaAnimal'>

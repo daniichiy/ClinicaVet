@@ -4,7 +4,7 @@
 
 
     $animalView = new AnimalView();
-    
+    $tratamentoView = new TratamentoView();
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +24,7 @@
 
     <section id="area-tratamento">
         <h1>Registro de atendimento</h1>
-        <form>
+        <form action="<?php  //echo $_SERVER['PHP_SELF']?>" method="POST">
             <div class="item-form">
                 <label>Nome do animal:</label>
                 <input type="text" value="<?php echo $animalView->TrazerNome($cod);?>" disabled>
@@ -40,12 +40,16 @@
                 <label>Tratamento:</label>
                 <select>
                     <option selected disabled>Selecione o Tratamento</option>
+                    <?php  $tratamentoView->ExibirTratamentos();?>
+                    <!-- add os options aqui -->
                 </select>
             </div>
+
 
             <div class="item-form-bloco">
                 <label>Descrição do Tratamento:</label>
                 <textarea rows="2" disabled>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere ducimus saepe eum ea id, ex, deleniti non repellendus impedit provident laborum perferendis excepturi voluptate voluptatum magnam dolor rerum, laudantium velit?</textarea>
+                <!-- trazer a descrição do tratamento selecionado aqui -->
             </div>
 
             <div class="item-form-bloco">
@@ -66,18 +70,11 @@
                 <th>Descrição do Tratamento</th>
             </thead>
             <tbody>
-                <tr>
-                    <td class="data">30/08/2024 às 11:35</td>
-                    <td>Vermifugação</td>
-                    <td>Houve reação alérgica e foi adminitrado Apoquel 6g</td>
-                </tr>
-                <tr>
-                    <td class="data">30/08/2024 às 11:30</td>
-                    <td>Vacina Antirrábica</td>
-                    <td>Renovar em 1 ano</td>
-                </tr>
+                <?php $tratamentoView->ExibirHistorico($cod); ?>
             </tbody>
         </table>
+
+        
     </section>
 </body>
 </html>
