@@ -33,7 +33,7 @@ class AnimalController {
                 $animal = new Animal($codigo, $nome, $especie);
                 array_push($lista, $animal);
             }
-            $pdo = null; //finaliza conexao com o banco
+            $pdo = null;
 
         } catch(PDOException $ex){
             echo 'Erro: ' . $ex->getMessage();
@@ -95,13 +95,12 @@ class AnimalController {
             $cSQL = $pdo->prepare('SELECT nome_animal FROM animal WHERE cod_animal = :codigo'); 
             $cSQL->bindParam('codigo', $cod);
             $cSQL->execute();
-            $nome = $cSQL->fetch(PDO::FETCH_ASSOC);
-            
-            $pdo = null; 
+            $nome = $cSQL->fetch(PDO::FETCH_ASSOC); 
 
         } catch(PDOException $ex){
             echo 'Erro: ' . $ex->getMessage();
         }
+        $pdo = null;
 
         return($nome['nome_animal']);
     }

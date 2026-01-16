@@ -24,13 +24,18 @@ class TratamentoView
         }
     }
 
-    function ExibirTratamentos(){
+    function ExibirTratamentos()
+    {
         $tratamentoController = new TratamentoController();
         $listaTratamento = $tratamentoController->listarTratamentos();
 
-        if(!empty($listaTratamento)){
-            for($i = 0; $i < count($listaTratamento); $i++){
-                echo "<option>{$listaTratamento[$i]}</option>";
+        if (!empty($listaTratamento)) {
+            for ($i = 0; $i < count($listaTratamento); $i++) {
+                echo '<option 
+                    value="' . $listaTratamento[$i]['cod_tratamento'] . '"
+                    data-descricao="' . htmlspecialchars($listaTratamento[$i]['descricao_tratamento']) . '">
+                    ' . $listaTratamento[$i]['nome_tratamento'] . '
+                  </option>';
             }
         }
     }

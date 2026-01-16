@@ -58,12 +58,12 @@ class TratamentoController{
         try{
             $pdo = new PDO($servidor, $usuario, $senha);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $cSQL = $pdo->prepare('SELECT nome_tratamento FROM tratamento');
+            $cSQL = $pdo->prepare('SELECT cod_tratamento, nome_tratamento, descricao_tratamento FROM tratamento');
             $cSQL->execute();
             $dados = $cSQL->fetchAll(PDO::FETCH_ASSOC);
 
             for($i = 0; $i < count($dados); $i++){
-                array_push($lista, $dados[$i]['nome_tratamento']);
+                array_push($lista, $dados[$i]);
             }
             $pdo = null;
 
