@@ -1,13 +1,11 @@
 <?php
 require_once 'config/config.php';
-$config = require __DIR__ . '/config/database.php';
 
 $codAnimal = $_GET['cod'] ?? null;
 
 $animalView = new AnimalView();
 $tratamentoView = new TratamentoView();
 
-require_once 'classes/controllers/ProntuarioController.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar'])) {
 
