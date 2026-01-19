@@ -34,7 +34,7 @@ class TratamentoController{
 
                 $tratamento = new Tratamento($codTratamento, $nomeTratamento, $descricaoTratamento);
 
-                $prontuario = new Prontuario($codAnimal, $tratamento, $dataTratamento, $descricaoObs);
+                $prontuario = new Prontuario(null, $tratamento, $dataTratamento, $descricaoObs);
                 
                 array_push($lista, $prontuario);
             }
@@ -73,4 +73,44 @@ class TratamentoController{
 
         return $lista;
     }
+
+    function BuscarPorId($codTratamento): Tratamento {
+        $config = require __DIR__ . '/../../config/database.php';
+
+        try {
+            $pdo = new PDO(
+                $config['servidor'],
+                $config['usuario'],
+                $config['senha']
+            );
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $sql = "
+                SELECT cod_tratamento, nome_tratamento, descricao_tratamento
+                FROM tratamento
+                WHERE cod_tratamento = :id
+                LIMIT 1
+            ";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':id', $codTratamento, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$dados) {
+                throw new Exception('Tratamento não encontrado');
+            }
+
+            return new Tratamento(
+                $dados['cod_tratamento'],
+                $dados['nome_tratamento'],
+                $dados['descricao_tratamento']
+            );
+
+        } catch (PDOException $e) {
+            throw new Exception('Erro ao buscar tratamento');
+        }
+    }
+    
 }

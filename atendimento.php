@@ -1,10 +1,25 @@
 <?php
-require_once('config/config.php');
-$cod = $_GET['cod'] ?? '';
+require_once 'config/config.php';
+$config = require __DIR__ . '/config/database.php';
 
+$codAnimal = $_GET['cod'] ?? null;
 
 $animalView = new AnimalView();
 $tratamentoView = new TratamentoView();
+
+require_once 'classes/controllers/ProntuarioController.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar'])) {
+
+    $prontuarioController = new ProntuarioController();
+
+    $prontuarioController->SalvarProntuario(
+        $_POST['animalCod'],
+        $_POST['tratamento'] ?? null,
+        $_POST['data-prontuario'] ?? null,
+        $_POST['descricao-obs'] ?? null
+    );
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,39 +41,40 @@ $tratamentoView = new TratamentoView();
 
     <section id="area-tratamento">
         <h1>Registro de atendimento</h1>
-        <form action="<?php  //echo $_SERVER['PHP_SELF']
-                        ?>" method="POST">
+        <form action="atendimento.php?cod=<?php echo $codAnimal; ?>" method="POST">
             <div class="item-form">
                 <label>Nome do animal:</label>
-                <input type="text" value="<?php echo $animalView->TrazerNome($cod); ?>" disabled>
+                <input type="text" value="<?php echo $animalView->TrazerNome($codAnimal); ?>" disabled>
             </div>
 
             <div class="item-form">
                 <label>Data:</label>
-                <input type="date">
+                <input name="data-prontuario" id="data-prontuario" type="datetime-local" required>
             </div>
 
             <div class="item-form">
                 <label>Tratamento:</label>
-                <select id="tratamento">
+                <select id="tratamento" name="tratamento" required>
                     <option selected disabled>Selecione o Tratamento</option>
                     <?php
                     $lista = $tratamentoView->ExibirTratamentos();
                     ?>
                 </select>
+
             </div>
 
             <div class="item-form-bloco">
                 <label>Descrição do Tratamento:</label>
-                <textarea id="descricaoTratamento" rows="2" disabled></textarea>
+                <textarea id="descricaoTratamento" name="descricaoTratamento" rows="2" disabled></textarea>
             </div>
 
             <div class="item-form-bloco">
                 <label>Descrição do Atendimento:</label>
-                <textarea rows="6"></textarea>
+                <textarea name="descricao-obs" id="descricao-obs" rows="6"></textarea>
             </div>
 
-            <button class="botao">Salvar</button>
+            <button class="botao" type="submit" name="salvar">Salvar</button>
+            <input type="hidden" name="animalCod" value="<?php echo $codAnimal; ?>">
         </form>
     </section>
 
@@ -71,7 +87,7 @@ $tratamentoView = new TratamentoView();
                 <th>Descrição do Tratamento</th>
             </thead>
             <tbody>
-                <?php $tratamentoView->ExibirHistorico($cod); ?>
+                <?php $tratamentoView->ExibirHistorico($codAnimal); ?>
             </tbody>
         </table>
     </section>

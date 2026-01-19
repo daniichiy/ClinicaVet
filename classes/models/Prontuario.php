@@ -6,8 +6,9 @@ class Prontuario {
     public $DataTratamento;
     public $Descricao;
 
-    function __construct($animal = null, Tratamento $tratamento = null, $dataTratamento = null, $descricao = null) {
+    function __construct(Animal $animal = null, Tratamento $tratamento = null, $dataTratamento = null, $descricao = null) {
         $this->Animal = $animal;
+        $this->Tratamento = $tratamento;
         $this->DataTratamento = $dataTratamento;
         $this->Descricao = $descricao;
 
